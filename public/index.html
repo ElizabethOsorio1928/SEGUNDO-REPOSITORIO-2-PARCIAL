@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+ <head>
+   <meta charset="utf-8">
+   <title>Ejercicio 2 de PWA</title>
+
+   <!-- Ícono para la página web. -->
+   <link rel="icon" sizes="32x32" href="osos.ico">
+
+   <!-- Color de la barra de navegación de Chrome. -->
+   <meta name="theme-color" content="yellow">
+
+   <!-- Configuración de la Web App Chrome y Microsoft Store. -->
+   <link rel="manifest" href="manifest.json">
+
+   <!-- Configuración para del acceso directo en Windows Edge/IE -->
+   <!-- Icono -->
+   <meta name="msapplication-TileImage" content="img/pardo.png">
+   <!-- Color de tile. -->
+   <meta name="msapplication-TileColor" content="#4fc3f7">
+
+   <!-- Configuración para Web Clip en Safari. -->
+   <meta name="mobile-web-app-capable" content="yes">
+   <link rel="apple-touch-icon" sizes="1024x1024" href="img/pardo.png">
+   <link rel="apple-touch-startup-image" sizes="1024x1024"
+     href="img/pardo.png">
+   <meta name="apple-mobile-web-app-capable" content="yes">
+   <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link rel="stylesheet" href="css/estilos.css">
+
+   <!-- update the version number as needed -->
+   <script defer src="/__/firebase/6.0.2/firebase-app.js"></script>
+   <!-- include only the Firebase features as you need -->
+   <script defer src="/__/firebase/6.0.2/firebase-auth.js"></script>
+   <script defer src="/__/firebase/6.0.2/firebase-firestore.js"></script>
+   <script defer src="/__/firebase/6.0.2/firebase-messaging.js"></script>
+   <script defer src="/__/firebase/6.0.2/firebase-storage.js"></script>
+   <!-- initialize the SDK after all desired features are loaded -->
+   <script defer src="/__/firebase/init.js"></script>
+
+ </head>
+ <body>
+   <center>
+   <h1> Sitio web PWA 2.0</h1>
+   <h4>En este sitio web puedes ingresar tu nombre y te lo devolvera letra por letra y escrito al revés.</h4>
+   <form name="vista">
+     <p>Ingresa un solo Nombre : 
+       <input type="text" name="nombre1" required placeholder="Escribe tu nombre" accesskey="1" pattern="[a-zA-ZñÑáéíóúÁÉÍÓÚ/s]+">
+     </p>
+   
+     <p>
+       <output name="respuesta"></output>
+     </p>
+     <p>
+       <button type="submit">Da click aquí</button>
+     </p>
+
+     <main role="main">
+       <p><output name="msj">Ejemplo de PWA  &hellip;</output></p>
+     </main>
+
+
+   </form>
+   <script>
+     "use strict";
+     document.vista.addEventListener("submit", saluda);
+     function saluda(evt) {
+       evt.preventDefault();
+       const nombre1 = document.vista.nombre1.value.trim();
+       var v = nombre1.split("");
+       
+       var x = nombre1.split("");
+       var y = x.reverse();
+       var z = y.join("");
+
+       document.vista.respuesta.value = `Tu nombre es ${nombre1} y las letras de tu nombre son ${v} y tu nombre al revés es  ${z}.`;
+     }
+   </script>
+   <footer>
+    Osorio Mendoza Elizabeth.
+    IC51M
+
+   </footer>
+   <script>
+     /* Registra un service worker para instalar la aplicación en el
+      * caché del navegador. */
+     async function registraServiceWorker() {
+       if ("serviceWorker" in navigator) {
+         try {
+           const registro = await navigator.serviceWorker.register("sw.js");
+           console.log("Service Worker registrado.");
+           console.log(registro);
+         } catch (e) {
+           console.log(e);
+         }
+       }
+     }
+
+     registraServiceWorker();
+     document.addEventListener('DOMContentLoaded', function () {
+       try {
+         let app = firebase.app();
+         let features = ['auth', 'database', 'messaging', 'storage']
+           .filter(feature => typeof app[feature] === 'function');
+         document.vista.msj.value =
+           `Firebase SDK cargó con: ${features.join(', ')}`;
+       } catch (e) {
+         console.log(e);
+         document.vista.msj.value =
+           'Error cargando Firebase SDK. Revisa la consola del navegador.';
+       }
+     });
+   </script>
+ </body>
+</html>
